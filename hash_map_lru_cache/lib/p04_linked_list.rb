@@ -14,8 +14,10 @@ class Node
   end
 
   def remove
-    # optional but useful, connects previous link to next link
-    # and removes self from list.
+    preceding = self.prev
+    proceeding = self.next
+    preceding.next = proceeding
+    proceeding.prev = preceding
   end
 end
 
@@ -36,25 +38,33 @@ class LinkedList
   end
 
   def first
+    self.head.next
   end
 
   def last
+    self.tail.prev
   end
 
   def empty?
     self.head.next == self.tail
-   
   end
 
   def get(key)
+    self.each do |node| 
+      if node.key == key
+        return node.val 
+      end
+    end
   end
 
   def include?(key)
+    self.each { |node| return true if node.key == key }
+    false
   end
 
   def append(key, val)
     appendingnode = Node.new(key, val)
-    self.tail.prev.next =  appendingnode
+    self.last.next =  appendingnode
     appendingnode.prev = self.tail.prev
     appendingnode.next = self.tail 
     self.tail.prev = appendingnode
@@ -62,12 +72,27 @@ class LinkedList
   end
 
   def update(key, val)
+    self.each do |node| 
+      if node.key == key
+        node.val = val
+      end
+    end
   end
 
   def remove(key)
+    self.each do |node|
+      if node.key == key
+        node.remove
+      end
+    end
   end
 
   def each
+      current_node = self.head.next
+      until current_node == self.tail
+        yield current_node
+        current_node = current_node.next
+      end
   end
 
   # uncomment when you have `each` working and `Enumerable` included
