@@ -58,7 +58,11 @@ class IntSet
   def num_buckets
     @store.length
   end
+
+
 end
+
+
 
 class ResizingIntSet
   attr_accessor :store, :count
